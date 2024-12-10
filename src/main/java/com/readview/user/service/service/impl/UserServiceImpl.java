@@ -6,7 +6,7 @@ import com.readview.user.service.dto.UserResponseDTO;
 import com.readview.user.service.entity.User;
 import com.readview.user.service.exception.BadRequestException;
 import com.readview.user.service.repository.UserRepository;
-import com.readview.user.service.security.PasswordService;
+import com.readview.user.service.security.service.PasswordService;
 import com.readview.user.service.service.UserService;
 import com.readview.user.service.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -38,7 +38,7 @@ public class UserServiceImpl implements UserService {
             String email = CommonUtils.trimAndGet(userRequestDTO.getEmail());
             String hashedPassword = passwordService.hashPassword(userRequestDTO.getPassword());
 
-            Optional<User> optionalUser = userRepository.findByEmail(email);
+            Optional<User> optionalUser = userRepository.findByEmailIgnoreCase(email);
             if(optionalUser.isPresent()) throw new BadRequestException("User with same email exists");
 
             user.setFirstName(firstName);
@@ -75,6 +75,11 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(String userId) {
         int count = userRepository.deleteUserById(userId);
         if(count == 0) throw new BadRequestException(Messages.INVALID_USER_ID);
+    }
+
+    @Override
+    public User getUserByEmail(String email) {
+        return userRepository.findByEmailIgnoreCase(email).orElseThrow(() -> new BadRequestException(Messages.INVALID_EMAIL));
     }
 
     private UserResponseDTO toUserResponseDTO(User user) {

@@ -1,4 +1,4 @@
-package com.readview.user.service.security;
+package com.readview.user.service.security.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
