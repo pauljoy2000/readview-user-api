@@ -5,6 +5,8 @@ import com.readview.user.service.constants.Messages;
 import com.readview.user.service.dto.ApiResponse;
 import com.readview.user.service.dto.LoginRequestDTO;
 import com.readview.user.service.dto.LoginResponseDTO;
+import com.readview.user.service.dto.TokenValidationRequestDTO;
+import com.readview.user.service.dto.TokenValidationResponseDTO;
 import com.readview.user.service.service.AuthService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +39,23 @@ public class AuthController {
                                 .message(Messages.LOGIN_SUCCESS)
                                 .data(loginResponseDTO)
                                 .build()
+                );
+    }
+
+    @PostMapping("/validate")
+    public ResponseEntity<ApiResponse> validateToken(
+            @RequestBody TokenValidationRequestDTO tokenValidationRequestDTO
+    ) {
+        log.info("START - validate token");
+        TokenValidationResponseDTO tokenValidationResponseDTO = authService.validateToken(tokenValidationRequestDTO);
+        log.info("END - validate token");
+        return ResponseEntity.ok()
+                .body(
+                        ApiResponse.builder()
+                        .statusCode(HttpStatus.OK.value())
+                        .message(Messages.TOKEN_VALIDATION_SUCCESS)
+                        .data(tokenValidationResponseDTO)
+                        .build()
                 );
     }
 }

@@ -10,6 +10,7 @@ public class Messages {
     public static final String USER_FETCHED = "User(s) fetched";
     public static final String USER_DELETED = "User deleted";
     public static final String LOGIN_SUCCESS = "Login successful";
+    public static final String TOKEN_VALIDATION_SUCCESS = "Token validation successful";
 
     /**
      * Error messages

@@ -7,9 +7,14 @@ import com.readview.user.service.entity.User;
 import java.util.List;
 
 public interface UserService {
+
     UserResponseDTO createUser(UserRequestDTO userRequestDTO);
+
     UserResponseDTO getUser(String userId);
+
     List<UserResponseDTO> getAllUsers();
+
     void deleteUserById(String userId);
+
     User getUserByEmail(String email);
 }

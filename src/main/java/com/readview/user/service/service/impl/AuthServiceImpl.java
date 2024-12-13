@@ -3,12 +3,15 @@ package com.readview.user.service.service.impl;
 import com.readview.user.service.constants.Messages;
 import com.readview.user.service.dto.LoginRequestDTO;
 import com.readview.user.service.dto.LoginResponseDTO;
+import com.readview.user.service.dto.TokenValidationRequestDTO;
+import com.readview.user.service.dto.TokenValidationResponseDTO;
 import com.readview.user.service.entity.User;
 import com.readview.user.service.exception.BadRequestException;
 import com.readview.user.service.security.service.JwtService;
 import com.readview.user.service.service.AuthService;
 import com.readview.user.service.service.UserService;
 import com.readview.user.service.util.CommonUtils;
+import io.jsonwebtoken.Claims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -53,6 +56,26 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException(Messages.INVALID_CREDENTIALS);
         } catch (Exception e) {
             log.error("Error while processing login request. {}", e.getMessage());
+            throw e;
+        }
+
+        return responseDTO;
+    }
+
+    @Override
+    public TokenValidationResponseDTO validateToken(TokenValidationRequestDTO tokenValidationRequestDTO) {
+        TokenValidationResponseDTO responseDTO = new TokenValidationResponseDTO();
+
+        try {
+            String email = jwtService.extractClaim(tokenValidationRequestDTO.getAccessToken(), Claims::getSubject);
+            User user = userService.getUserByEmail(email);
+            String name = CommonUtils.getFullUserName(user);
+
+            responseDTO.setUserId(user.getId());
+            responseDTO.setName(name);
+            responseDTO.setEmail(email);
+        } catch (Exception e) {
+            log.error("Error while validating token - {}", e.getMessage());
             throw e;
         }
 
