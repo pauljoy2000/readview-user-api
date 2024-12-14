@@ -11,6 +11,7 @@ import com.readview.user.service.service.UserService;
 import com.readview.user.service.util.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,9 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordService passwordService;
+
+    @Autowired
+    private DiscoveryClient discoveryClient;
 
     @Override
     public UserResponseDTO createUser(UserRequestDTO userRequestDTO) {
@@ -66,8 +70,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<UserResponseDTO> getAllUsers() {
-        List<User> users = userRepository.findAll();
-        return users.stream().map(this::toUserResponseDTO).toList();
+
+        return userRepository.findAll()
+                .stream()
+                .map(this::toUserResponseDTO)
+                .toList();
     }
 
     @Override
