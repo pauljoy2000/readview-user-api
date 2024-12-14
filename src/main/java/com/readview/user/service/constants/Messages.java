@@ -19,4 +19,6 @@ public class Messages {
     public static final String INVALID_USER_ID = "User does not exist";
     public static final String INVALID_EMAIL = "User with this email does not exist";
     public static final String INVALID_CREDENTIALS = "Invalid login credentials";
+    public static final String EXPIRED_ACCESS_TOKEN = "Access token is expired";
+    public static final String INVALID_ACCESS_TOKEN = "Access token is invalid";
 }
